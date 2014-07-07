@@ -1,0 +1,19 @@
+
+mission planner 
+CTRL-T  schnellverbind
+
+----
+
+
+
+
+    please try chaging param sr0_params to say 5
+
+    and sr3_params to 5.
+
+     
+
+    this will slow down the connect but should not flood the link
+
+
+---
