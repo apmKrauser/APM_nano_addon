@@ -62,11 +62,15 @@ unsigned long curr_millis    = 0;
 unsigned int  cntLostSeconds = 0;
 volatile unsigned long lastRPMmicros = 0;
 volatile unsigned long timeRPM       = 0;
-boolean      failsafe     = false;
-boolean      apm_home_set = false;	
-boolean      apm_armed    = false;
-boolean      SW1          = false;
-boolean      SW2          = false;
+boolean      failsafe        = false;
+boolean      apm_home_set    = false;	
+boolean      apm_armed       = false;
+boolean      SW1             = false;
+boolean      SW2             = false;
+boolean      frontLight_On   = false;
+boolean      frontLight_Auto = false;
+int8_t       apm_control_mode= -1;
+uint8_t      apm_mnt_autortrct_h= 0;
 uint16_t     rpm = 0;
 uint16_t	 alt_by_sonar = 0;  // cm
 uint16_t	 alt_over_home = 0;  // m
@@ -131,8 +135,12 @@ void parse_from_APM()
 	ap_bitflags = msg_fromAPM[1];
 	alt_by_sonar  = (int32_t) ( msg_fromAPM[2] + (msg_fromAPM[3] << 8));
 	alt_over_home = (int32_t) ( msg_fromAPM[4] + (msg_fromAPM[5] << 8));
-	apm_home_set = (ap_bitflags & (1 << 0));
-	apm_armed    =  (ap_bitflags & (1 << 1));
+    apm_mnt_autortrct_h = msg_fromAPM[6];
+    apm_control_mode    = msg_fromAPM[7];   
+	apm_home_set       = (ap_bitflags & (1 << 0));
+	apm_armed          = (ap_bitflags & (1 << 1));
+    frontLight_Auto    = (ap_bitflags & (1 << 2));
+	frontLight_On      = (ap_bitflags & (1 << 3));
 }
 
 void read_from_APM()
@@ -162,6 +170,7 @@ void pack_msg_for_APM()
 	msg_toAPM[1] = (byte) (rpm & 0x00FF);
 	msg_toAPM[2] = (byte) ((rpm & 0xFF00) >> 8);
 //	msg_toAPM[3] = ap_bitflags;
+    msg_toAPM[3] = 0x00;
 }
 
 void blink_led (uint16_t led_on_time, uint16_t led_repeat)

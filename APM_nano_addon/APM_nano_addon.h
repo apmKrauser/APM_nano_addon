@@ -11,8 +11,9 @@
 
 
 
-#define msg_toAPM_size 3
-#define msg_fromAPM_size 6
+#define msg_toAPM_size 4
+#define msg_fromAPM_size 9
+
 
 // byte = unsigned char
 
