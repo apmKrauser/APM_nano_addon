@@ -212,3 +212,9 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+APM_nano_addon/Visual Micro/.APM_nano_addon.vsarduino.h
+APM_nano_addon/Visual Micro/.APM_nano_addon.vsarduino.h
+APM_nano_addon/Visual Micro/Compile.vmps.xml
+APM_nano_addon/Visual Micro/Configuration.Release.vmps.xml
+APM_nano_addon/Visual Micro/Upload.vmps.xml
+*.vcxproj

@@ -39,7 +39,7 @@
 #define ALT_landing_light_Off 220 // cm
 
 #define ALT_front_light_On  20 // m
-#define ALT_front_light_Off 22 // m
+#define ALT_front_light_Off 25 // m
 
 #define RPM_avg_Nr      20  // 0 - 255
 #define RPM_avg_medians 14
@@ -62,6 +62,7 @@ unsigned long curr_millis    = 0;
 unsigned int  cntLostSeconds = 0;
 volatile unsigned long lastRPMmicros = 0;
 volatile unsigned long timeRPM       = 0;
+uint8_t      frontLight_out;
 boolean      failsafe        = false;
 boolean      apm_home_set    = false;	
 boolean      apm_armed       = false;
@@ -223,6 +224,7 @@ void loop()
 		lastTime50ms = curr_millis;
 		cnt++;
 
+        // mixing channels ~1Hz
 		if (((cnt + 1) % 20) == 0) {
 			RPM_detach();
 			ModeIn_gyr = pulseIn (PIN_Gyr_in, HIGH, 20000); //read RC channel 20ms timeout
@@ -251,35 +253,30 @@ void loop()
 
 	if ( (curr_millis - lastTime1s) > 1000 ) {  // 
 
-
-
-		//Serial.print (";  RPM: ");
-		//Serial.printlm (rpm);
-	    //Serial.print (";  dRot: ");
-	    //Serial.print (dRot);
-	    //Serial.print (";  ms: ");
-	    //Serial.println ((curr_millis - lastTime1s));
-
 		lastTime1s = curr_millis;
 	}
 
 
 	if (apm_armed) {
 		if ((SW1) && ( (CurrMode != NoLight_FlightMode) || (SW2)) ) {                        // flying with light
+            
+            if (alt_by_sonar < ALT_landing_light_On) digitalWrite(PIN_Light2, HIGH);
+			if ( (alt_by_sonar > ALT_landing_light_Off) && (alt_over_home > ALT_landing_light_On) ) digitalWrite(PIN_Light2, LOW);
+
 			if (alt_over_home < ALT_front_light_On) {
 				if ((CurrMode == FrontLight_FlightMode)) {
-					analogWrite(PIN_FrontLight, FrontLight_brightness);
-				} else { digitalWrite(PIN_FrontLight, LOW); }
+					frontLight_out = FrontLight_brightness;
+				} else { frontLight_out = 0; }
 			} 
-			if (alt_over_home > ALT_front_light_Off) digitalWrite(PIN_FrontLight, LOW); 
-
-			if (alt_by_sonar < ALT_landing_light_On) digitalWrite(PIN_Light2, HIGH);
-			if (alt_by_sonar > ALT_landing_light_Off) digitalWrite(PIN_Light2, LOW);
+			if (alt_over_home > ALT_front_light_Off) frontLight_out = 0;
+            
 
 		} else {
 			digitalWrite(PIN_Light2, LOW);
-			digitalWrite(PIN_FrontLight, LOW);
+			frontLight_out = 0;
 		}
+        if (!frontLight_Auto) frontLight_out = (frontLight_On)?FrontLight_brightness:0;
+        analogWrite(PIN_FrontLight, frontLight_out);
 	} else {
 		digitalWrite(PIN_Light2, LOW);
 		digitalWrite(PIN_FrontLight, LOW);
