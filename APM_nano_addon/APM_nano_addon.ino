@@ -42,7 +42,7 @@
 #define ALT_front_light_Off 25 // m
 
 #define RPM_avg_Nr      20  // 0 - 255
-#define RPM_avg_medians 14
+#define RPM_avg_medians 4
 
 //FastSerialPort0(Serial);
 RunningMedian<float,RPM_avg_Nr> 	RPMavg;
@@ -208,7 +208,7 @@ void RPM_detach()
 	//}
 	timeRPM = 0;
 	RPMavg.getRedAverage(RPM_avg_medians, _rpm);
-	rpm = (uint16_t)round(_rpm);
+	rpm = (uint16_t)(round(_rpm) / 2); 
 }
 
 void loop()
