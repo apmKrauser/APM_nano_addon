@@ -70,8 +70,10 @@ public:
             uint8_t stop = start + nMedians;
             sort();
             float sum = 0;
-            for (uint8_t i = start; i < stop; i++) sum += _as[i];
+            for (uint8_t i = start; i < stop; i++) sum += _as[i];//{Serial.print(round(_as[i]),DEC); Serial.print(" "); sum += _as[i];}
             value = sum / nMedians;
+            //Serial.print(round(value));
+            //Serial.println(".");
             return OK;
         }
         return NOK;

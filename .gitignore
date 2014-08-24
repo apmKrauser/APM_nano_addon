@@ -218,3 +218,7 @@ APM_nano_addon/Visual Micro/Compile.vmps.xml
 APM_nano_addon/Visual Micro/Configuration.Release.vmps.xml
 APM_nano_addon/Visual Micro/Upload.vmps.xml
 *.vcxproj
+APM_nano_addon/Visual Micro/Upload.vmps.xml
+APM_nano_addon/Visual Micro/Upload.vmps.xml
+APM_nano_addon/Visual Micro/Configuration.Release.vmps.xml
+APM_nano_addon/Visual Micro/Compile.vmps.xml

@@ -31,8 +31,8 @@
 
 
 //#define RPM_Divisions   1   // Unterteilungen am Abnehmer
-#define RPM_reattach_ms 17UL
-#define RPM_lowpass_us 17000UL   // 3500 rpm
+#define RPM_reattach_ms 8UL //17UL
+#define RPM_lowpass_us 8500UL //17000UL   // 3500 rpm
 #define RPM_highpass_us 300000UL // 200 rpm
 
 #define ALT_landing_light_On  180 // cm
@@ -42,7 +42,7 @@
 #define ALT_front_light_Off 25 // m
 
 #define RPM_avg_Nr      20  // 0 - 255
-#define RPM_avg_medians 4
+#define RPM_avg_medians 6
 
 //FastSerialPort0(Serial);
 RunningMedian<float,RPM_avg_Nr> 	RPMavg;
@@ -208,7 +208,7 @@ void RPM_detach()
 	//}
 	timeRPM = 0;
 	RPMavg.getRedAverage(RPM_avg_medians, _rpm);
-	rpm = (uint16_t)(round(_rpm) / 2); 
+	rpm = (uint16_t)(round(_rpm)); 
 }
 
 void loop()
